@@ -17,6 +17,27 @@ Currently, the tool does the following:
 ```Python
 import string
 
+
+def check_notation_section(title):
+    return True # To be done
+
+
+def check_notation_subsection(title):
+    return True # To be done
+
+
+def check_notation_subsubsection(title):
+    return True # To be done
+
+
+def check_notation_paragraph(title):
+    return True # To be done
+
+
+def check_notation_subparagraph(title):
+    return True # To be done
+
+
 config = {
     "allowed_chars": string.printable + "ÄÖÜäöüß",
     "notation_levels": {
@@ -38,12 +59,26 @@ config = {
         ("threat", ["thread"]),
         ("proposed", ["purposed"])
     ],
+    "wrong_abbrev": [
+        ("et al.", ["et al ", "et. al", "et. al"]),
+        ("i.e.", ["i.e ", " ie."]),
+        ("e.g.", ["e.g ", " eg."]),
+        ("etc.", ["etc "])
+    ],
+    "weasel_words": [
+        "might", "appears to be", "it is easy to see", "theoretically", "actual", "In this paper", "almost", "many",
+        "various", "very", "fairly", "several", "extremely", "exceedingly", "quite", "remarkably", "few",
+        "surprisingly", "mostly", "largely", "huge", "tiny", "excellent", "interestingly", "significantly",
+        "substantially", "clearly", "vast", "relatively", "completely"
+    ],
     "checks": [
         "check_allowed_chars",
         "check_notation_levels",
-        "check_twins",
-        "check_confusing",
         "check_doubled_words",
+        "check_twins",
+        "check_abbrev",
+        "check_weasel_words",
+        "check_confusing",
     ]
 }
 ```
