@@ -9,6 +9,8 @@ Currently, the tool does the following:
 * It finds non-allowed characters, i.e. difficult to spot unicode characters which may introduce parsing errors.
 * It checks for consistency in titles, i.e. if the same style (e.g. upper-case style "How to write a Research Paper" or lower-case style "How to write a research paper") is used to name each section, subsection, etc.
 * It warns on potentially confusing words like "proposed" and "purposed".
+* It checks for wrong abbreviation, e.g. "et al" or "ie.".
+* It checks for so called ["weasel words"](https://en.wikipedia.org/wiki/Weasel_word).
 
 # Sample Configuration
 
