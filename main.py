@@ -31,7 +31,7 @@ def check_notation_levels(text):
     for match in find_match(file, r"\\(section|subsection|subsubsection|paragraph|subparagraph){(.*?)}"):
         (level, title) = match
         if not config["notation_levels"][level](title):
-            print('[!] found non-conforming {:<13} "{:<60}"'.format(level, title))
+            print('[?] found potentially inconsistent {:<13} "{:<60}"'.format(level, title))
 
 
 def check_allowed_chars(text):
@@ -53,7 +53,7 @@ def check_twins(text):
         for (good, bad) in config["notation_twins"]:
             for twin in bad:
                 if twin in line.lower():
-                    print('[!] found bad twin "{}" in line {}. Did you mean "{}"?'.format(twin, lineno + 1, good))
+                    print('[!] found evil twin "{}" in line {}. Did you mean "{}"?'.format(twin, lineno + 1, good))
 
 
 def check_confusing(text):
