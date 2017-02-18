@@ -18,26 +18,6 @@ Currently, the tool does the following:
 import string
 
 
-def check_notation_section(title):
-    return True # To be done
-
-
-def check_notation_subsection(title):
-    return True # To be done
-
-
-def check_notation_subsubsection(title):
-    return True # To be done
-
-
-def check_notation_paragraph(title):
-    return True # To be done
-
-
-def check_notation_subparagraph(title):
-    return True # To be done
-
-
 config = {
     "allowed_chars": string.printable + "ÄÖÜäöüß",
     "notation_levels": {
