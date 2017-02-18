@@ -23,14 +23,15 @@ def check_notation_subparagraph(title):
 
 config = {
     # Detect characters, e.g. unicode chars, which may introduce subtle errors
-    # in TeX files. We find the given definition suitable for german texts.
+    # in TeX files. We find the given definition suitable for german texts, but
+    # use what you like.
     "allowed_chars": string.printable + "ÄÖÜäöüß",
-    # Define the notation for section, subsection, etc., e.g.
-    # upper- "My Research Paper" vs lower-case "My research paper".
-    # The function bodies at the top can be defined to fulfill your needs.
+    # Define the notation for section, subsection, etc. titles, e.g. upper-
+    # "My Research Paper" vs lower-case "My research paper". The function
+    # bodies at the top of this `config.py` can be defined to fulfill your needs.
     "notation_levels": {
-        # Typically, some words are treated differently in titles, e.g.
-        # determiner like "the", "any", etc. Define them here for convenient use.
+        # Typically, some words are treated differently in titles, e.g. determining
+        # words like "the", "any", etc. You may define them here for convenient use.
         "ignore_words": [
             "of", "on", "the", "to", "for",
             "and", "with", "without", "any"
@@ -41,20 +42,21 @@ config = {
         "paragraph": check_notation_paragraph,
         "subparagraph": check_notation_subparagraph,
     },
-    # Define the notation to be used for specific words. The first element in
-    # the tuple denotes the correct version, the second is a list of "evil twins".
+    # Define the correct notation for specific words. The first element in the
+    # tuple denotes the correct version, the second lists various "evil twins".
     "notation_twins": [
         ("public key", ["public-key", "publickey", "pubkey"]),
         ("elliptic curve", ["elliptic-curve"])
     ],
-    # Some words will pass a spell-checking, but may carry very different meaning.
-    # If you spot some of them during your work on a document, put them here to be
-    # prepared in the future.
+    # Some words pass a spell-check, but may carry very different meaning. If you spot
+    # some of them during writing, put them here to be prepared in the future. The first
+    # part of the tuple is the "probably right" word.
     "confusing_words": [
         ("threat", ["thread"]),
         ("proposed", ["purposed"])
     ],
-    # Define which checks to use? These checks are defined in main and can be extended.
+    # Define which checks to use. These checks are defined in `main.py? and can be
+    # extended. Pull-requests to `https://github.com/duesee/pedanticpaper` are welcome.
     "checks": [
         "check_allowed_chars",
         "check_notation_levels",
