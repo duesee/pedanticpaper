@@ -1,11 +1,11 @@
 # Pedanticpaper
 
-This script spots several mistakes in TeX files, a spell-checker won't. In order to work, a configuration file must be defined.
+This script spots several mistakes when writing research papers, a spell-checker won't. This is archievd by defining a per-project configuration file.
 
 Currently, the tool does the following:
 
-* Find "evil twins", e.g. check that "side-channel" was always used instead of "side channel" or "sidechannel".
-* Check for consistency of section-, subsection-, etc. title, e.g. "How to write Research Papers" (upper-case style) vs. "How to write research papers" (lower-case style). The implementation must be provided in the config file.
+* Find "evil twins", e.g. check that the notation "side-channel" was always used instead of "side channel" or "sidechannel". This is especially useful when content is provided by multiple authors.
+* Check for the consistency of titles, e.g. "How to write Research Papers" (upper-case style) vs. "How to write research papers" (lower-case style). The implementation must be provided in the config file.
 * Warn on potentially confusing words like "proposed" and "purposed".
 * Find doublettes, i.e. "We showed that that..."
 * Find non-allowed characters, i.e. difficult to spot unicode characters which may introduce parsing errors.
@@ -49,19 +49,19 @@ config = {
 # Sample
 
 ```
-$ python main.py                                                       130 ↵
-### Testing file test/classic.tex
+$ python main.py ./
+### Starting recursive search from "./"
+### Testing file "classic.tex"
 [!] found non-allowed char '²' in line 3
-[!] found bad twin "elliptic-curve" in line 3. Did you mean "elliptic curve"?
-[!] found doublette ('the', 'the') in line 3
+[!] found evil twin "elliptic-curve" in line 3. Did you mean "elliptic curve"?
+[!] found doublette "the the" in line 3
 
-### Testing file test/input/ecc.tex
-[!] found bad twin "public-key" in line 3. Did you mean "public key"?
+### Testing file "ecc.tex"
+[!] found evil twin "public-key" in line 3. Did you mean "public key"?
 [?] found potentially confusing word "purposed" in line 3. Did you mean "proposed"?
-[!] found doublette ('is', 'is') in line 3
+[!] found doublette "is is" in line 3
 ```
 
 # Important
 
-The script may contain "unpythonic" or unelegant code and insult pedantic programmers. Beside from that,
-it does not change any files and pull-request are welcome.
+The script may contain "unpythonic" or unelegant code and insult pedantic programmers. Beside from that, it does not change any files and pull-request are always welcome.
