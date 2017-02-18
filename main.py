@@ -32,7 +32,7 @@ def check_notation_levels(text):
     for match in find_match(file, r"\\(section|subsection|subsubsection|paragraph|subparagraph){(.*?)}"):
         (level, title) = match
         if not config["notation_levels"][level](title):
-            print('[?] found potentially inconsistent {:<13} {:<60}'.format(level, '"{}"'.format(title)))
+            print('[S] found potentially inconsistent {:<13} {:<60}'.format(level, '"{}"'.format(title)))
 
 
 def check_allowed_chars(text):
@@ -47,7 +47,7 @@ def check_doubled_words(text):
     for lineno, line in enumerate(text.splitlines()):
         for doublette in doublettes.findall(line):
             (g1, g2) = doublette
-            print('[!] found doublette "{} {}" in line {}'.format(g1, g2, lineno + 1))
+            print('[D] found doublette "{} {}" in line {}'.format(g1, g2, lineno + 1))
 
 
 def check_twins(text):
@@ -55,7 +55,7 @@ def check_twins(text):
         for (good, bad) in config["notation_twins"]:
             for twin in bad:
                 if twin in line.lower():
-                    print('[!] found evil twin "{}" in line {}. Did you mean "{}"?'.format(twin, lineno + 1, good))
+                    print('[T] found evil twin "{}" in line {}. Did you mean "{}"?'.format(twin, lineno + 1, good))
 
 
 def check_confusing(text):
@@ -70,7 +70,7 @@ def check_weasel_words(text):
     for lineno, line in enumerate(text.splitlines()):
         for word in config["weasel_words"]:
             if word in line:
-                print('[!] found weasle word "{}" in line {}. Can it be clarified?'.format(word, lineno + 1))
+                print('[W] found weasle word "{}" in line {}. Can it be clarified?'.format(word, lineno + 1))
 
 
 def check_abbrev(text):
@@ -78,7 +78,7 @@ def check_abbrev(text):
         for (correct, erroneous) in config["wrong_abbrev"]:
             for word in erroneous:
                 if word in line:
-                    print('[!] found erroneous abbreviation "{}" in line {}. Did you mean "{}"?'.format(word, lineno + 1, correct))
+                    print('[A] found erroneous abbreviation "{}" in line {}. Did you mean "{}"?'.format(word, lineno + 1, correct))
 
 
 if __name__ == "__main__":
