@@ -66,6 +66,21 @@ def check_confusing(text):
                     print('[?] found potentially confusing word "{}" in line {}. Did you mean "{}"?'.format(word, lineno + 1, expected))
 
 
+def check_weasel_words(text):
+    for lineno, line in enumerate(text.splitlines()):
+        for word in config["weasel_words"]:
+            if word in line:
+                print('[!] found weasle word "{}" in line {}. Can it be clarified?'.format(word, lineno + 1))
+
+
+def check_abbrev(text):
+    for lineno, line in enumerate(text.splitlines()):
+        for (correct, erroneous) in config["wrong_abbrev"]:
+            for word in erroneous:
+                if word in line:
+                    print('[!] found erroneous abbreviation "{}" in line {}. Did you mean "{}"?'.format(word, lineno + 1, correct))
+
+
 if __name__ == "__main__":
     path = "./" if len(sys.argv) < 2 else sys.argv[1]
     print('### Starting recursive search from "{}"'.format(path))

@@ -55,13 +55,32 @@ config = {
         ("threat", ["thread"]),
         ("proposed", ["purposed"])
     ],
-    # Define which checks to use. These checks are defined in `main.py? and can be
+    # Wrong abbreviation used. Easily overlooked.
+    "wrong_abbrev": [
+        ("et al.", ["et al ", "et. al", "et. al"]),
+        ("i.e.", ["i.e ", " ie."]),
+        ("e.g.", ["e.g ", " eg."]),
+        ("etc.", ["etc "])
+    ],
+    # "A weasel word (...) is an informal term for words and phrases aimed at creating an
+    # impression that a specific or meaningful statement has been made, when instead only
+    # a vague or ambiguous claim has actually been communicated." (https://en.wikipedia.org/wiki/Weasel_word)
+    "weasel_words": [
+        # Taken from https://github.com/devd/Academic-Writing-Check/blob/master/checkwriting
+        "might", "appears to be", "it is easy to see", "theoretically", "actual", "In this paper", "almost", "many",
+        "various", "very", "fairly", "several", "extremely", "exceedingly", "quite", "remarkably", "few",
+        "surprisingly", "mostly", "largely", "huge", "tiny", "excellent", "interestingly", "significantly",
+        "substantially", "clearly", "vast", "relatively", "completely"
+    ],
+    # Define which checks to use. These checks are defined in `main.py` and can be
     # extended. Pull-requests to `https://github.com/duesee/pedanticpaper` are welcome.
     "checks": [
         "check_allowed_chars",
         "check_notation_levels",
-        "check_twins",
-        "check_confusing",
         "check_doubled_words",
+        "check_twins",
+        "check_abbrev",
+        "check_weasel_words",
+        "check_confusing",
     ]
 }
