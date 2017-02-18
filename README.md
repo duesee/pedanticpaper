@@ -70,13 +70,15 @@ $ python main.py ./
 ### Starting recursive search from "./"
 ### Testing file "classic.tex"
 [!] found non-allowed char '²' in line 3
-[!] found evil twin "elliptic-curve" in line 3. Did you mean "elliptic curve"?
 [!] found doublette "the the" in line 3
+[!] found evil twin "elliptic-curve" in line 3. Did you mean "elliptic curve"?
+[!] found erroneous abbreviation "e.g " in line 3. Did you mean "e.g."?
 
 ### Testing file "ecc.tex"
-[!] found evil twin "public-key" in line 3. Did you mean "public key"?
-[?] found potentially confusing word "purposed" in line 3. Did you mean "proposed"?
 [!] found doublette "is is" in line 3
+[!] found evil twin "public-key" in line 3. Did you mean "public key"?
+[!] found weasle word "extremely" in line 3. Can it be clarified?
+[?] found potentially confusing word "purposed" in line 3. Did you mean "proposed"?
 ```
 
 # Important
