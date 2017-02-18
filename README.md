@@ -1,14 +1,14 @@
 # Pedanticpaper
 
-This script spots several mistakes when writing research papers, a spell-checker won't. This is archievd by defining a per-project configuration file.
+The script at hand finds several mistakes when writing research papers, a spell-checker won't. This is archieved by defining a per-project configuration file.
 
 Currently, the tool does the following:
 
-* Find "evil twins", e.g. check that the notation "side-channel" was always used instead of "side channel" or "sidechannel". This is especially useful when content is provided by multiple authors.
-* Check for the consistency of titles, e.g. "How to write Research Papers" (upper-case style) vs. "How to write research papers" (lower-case style). The implementation must be provided in the config file.
-* Warn on potentially confusing words like "proposed" and "purposed".
-* Find doublettes, i.e. "We showed that that..."
-* Find non-allowed characters, i.e. difficult to spot unicode characters which may introduce parsing errors.
+* It checks for "evil twins", i.e. that a single notation (e.g. "side-channel") was used instead of different ones (e.g. "side channel" or "sidechannel"). This is especially useful when content is provided by multiple authors.
+* It finds doublettes, i.e. "We showed that that...". This can happen due to copy-paste errors and can easily be overlooked.
+* It finds non-allowed characters, i.e. difficult to spot unicode characters which may introduce parsing errors.
+* It checks for consistency in titles, i.e. if the same style (e.g. upper-case style "How to write a Research Paper" or lower-case style "How to write a research paper") is used to name each section, subsection, etc.
+* It warns on potentially confusing words like "proposed" and "purposed".
 
 # Sample Configuration
 
