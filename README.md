@@ -83,4 +83,4 @@ $ python main.py ./
 
 # Important
 
-The script may contain "unpythonic" or unelegant code and insult pedantic programmers. Beside from that, it does not change any files and pull-request are always welcome.
+The script at hand may contain unpythonic and/or unelegant code and insult pedantic programmers. Beside from that, it does not change any files and pull-request are always welcome.
