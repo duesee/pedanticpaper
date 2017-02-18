@@ -32,7 +32,7 @@ def check_notation_levels(text):
     for match in find_match(file, r"\\(section|subsection|subsubsection|paragraph|subparagraph){(.*?)}"):
         (level, title) = match
         if not config["notation_levels"][level](title):
-            print('[?] found potentially inconsistent {:<13} "{:<60}"'.format(level, title))
+            print('[?] found potentially inconsistent {:<13} {:<60}'.format(level, '"{}"'.format(title)))
 
 
 def check_allowed_chars(text):
@@ -46,7 +46,8 @@ def check_doubled_words(text):
     doublettes = re.compile(r"\s+(\w+)\s+(\1)\s+")
     for lineno, line in enumerate(text.splitlines()):
         for doublette in doublettes.findall(line):
-            print("[!] found doublette {} in line {}".format(doublette, lineno + 1))
+            (g1, g2) = doublette
+            print('[!] found doublette "{} {}" in line {}'.format(g1, g2, lineno + 1))
 
 
 def check_twins(text):
@@ -70,7 +71,7 @@ if __name__ == "__main__":
     print('### Starting recursive search from "{}"'.format(path))
 
     for file in walk_tex(path):
-        print("### Testing file {}".format(file))
+        print('### Testing file "{}"'.format(file))
         with open(file, "r") as file:
             file = file.read()
             for check in config["checks"]:
