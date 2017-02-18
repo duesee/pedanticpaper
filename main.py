@@ -5,6 +5,7 @@ from config import *
 
 import re
 import os
+import sys
 
 
 def find_match(data, regex):
@@ -65,7 +66,10 @@ def check_confusing(text):
 
 
 if __name__ == "__main__":
-    for file in walk_tex("test"):
+    path = "./" if len(sys.argv) < 2 else sys.argv[1]
+    print('### Starting recursive search from "{}"'.format(path))
+
+    for file in walk_tex(path):
         print("### Testing file {}".format(file))
         with open(file, "r") as file:
             file = file.read()
