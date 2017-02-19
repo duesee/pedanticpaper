@@ -50,7 +50,6 @@ config = {
 ```
 $ python main.py ./
 Starting recursive search from "./"
-Starting recursive search from "./"
 File "classic.tex:"
 	Line 7: found doublette "the the".
 	Line 7: found non-allowed char '²'.
