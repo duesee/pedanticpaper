@@ -1,0 +1,5 @@
+[
+	["threat",   ["\\bthread\\“"]],
+	["proposed", ["\\bpurposed\\b"]],
+	["",         ["\\bleek\\b", "\\black\\b", "\\bleak\\b"]]
+]

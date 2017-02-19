@@ -16,48 +16,30 @@ Currently, the tool does the following:
 
 ```Python
 import string
+import json
+
+
+def load_json(path):
+    return json.load(open(path, "rt"))
 
 
 config = {
+    "regex_doublettes": r"(\w+)\b\s+(\1)\b",
     "allowed_chars": string.printable + "ÄÖÜäöüß",
-    "notation_levels": {
-        "ignore_words": [
-            "of", "on", "the", "to", "for",
-            "and", "with", "without", "any"
-        ],
-        "section": check_notation_section,
-        "subsection": check_notation_subsection,
-        "subsubsection": check_notation_subsubsection,
-        "paragraph": check_notation_paragraph,
-        "subparagraph": check_notation_subparagraph,
-    },
-    "notation_twins": [
-        ("public key", ["public-key", "publickey", "pubkey"]),
-        ("elliptic curve", ["elliptic-curve"])
-    ],
-    "confusing_words": [
-        ("threat", ["thread"]),
-        ("proposed", ["purposed"])
-    ],
-    "wrong_abbrev": [
-        ("et al.", ["et al ", "et. al", "et. al"]),
-        ("i.e.", ["i.e ", " ie."]),
-        ("e.g.", ["e.g ", " eg."]),
-        ("etc.", ["etc "])
-    ],
-    "weasel_words": [
-        "might", "appears to be", "it is easy to see", "theoretically", "actual", "In this paper", "almost", "many",
-        "various", "very", "fairly", "several", "extremely", "exceedingly", "quite", "remarkably", "few",
-        "surprisingly", "mostly", "largely", "huge", "tiny", "excellent", "interestingly", "significantly",
-        "substantially", "clearly", "vast", "relatively", "completely"
-    ],
+    "evil_twins": load_json("assets/evil_twins.json"),
+    "wrong_abbrev": load_json("assets/wrong_abbrev.json"),
+    "confusing_words": load_json("assets/confusing_words.json"),
+    "denied_words": load_json("assets/denied_words.json"),
+    "weasel_words": load_json("assets/weasel_words.json"),
+    "passive_voice": load_json("assets/passive_voice.json"),
     "checks": [
         "check_allowed_chars",
-        "check_notation_levels",
         "check_doubled_words",
-        "check_twins",
+        "check_evil_twins",
         "check_abbrev",
         "check_weasel_words",
+        "check_passive_voice",
+        "check_denied_words",
         "check_confusing",
     ]
 }
@@ -67,19 +49,26 @@ config = {
 
 ```
 $ python main.py ./
-### Starting recursive search from "./"
-### Testing file "classic.tex"
-[!] found non-allowed char '²' in line 3
-[D] found doublette "the the" in line 3
-[T] found evil twin "elliptic-curve" in line 3. Did you mean "elliptic curve"?
-[A] found erroneous abbreviation "e.g " in line 3. Did you mean "e.g."?
+Starting recursive search from "./"
+Starting recursive search from "./"
+File "classic.tex:"
+	Line 7: found doublette "the the".
+	Line 7: found non-allowed char '²'.
+	Line 8: found evil twin "elliptic-curves". Did you mean "elliptic curves"?
+	Line 9: found erroneous abbreviation "e.g ". Did you mean "e.g."?
+	Line 9: found erroneous abbreviation "eg.". Did you mean "e.g."?
 
-### Testing file "ecc.tex"
-[D] found doublette "is is" in line 3
-[T] found evil twin "public-key" in line 3. Did you mean "public key"?
-[W] found weasle word "extremely" in line 3. Can it be clarified?
-[?] found potentially confusing word "purposed" in line 3. Did you mean "proposed"?
+File "ecc.tex:"
+	Line 3: found potentially confusing word "purposed". Did you mean "proposed"?
+	Line 5: found doublette "is is".
+	Line 6: found doublette "and and".
+	Line 9: found denied word "todo". Please resolve it.
+	Line 9: found weasel word "extremely". Can it be clarified?
 ```
+
+# Help building regular expressions
+
+See [regex101](https://regex101.com/).
 
 # Important
 
