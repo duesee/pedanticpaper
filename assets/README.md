@@ -9,7 +9,7 @@ the second is a lists of various "evil twins".
 
 ### Find wrong abbreviations.
 
-The same `(good, [err1, err2, ...])` pattern applies as in evil twins.
+The same `[good, [bad1, bad2, ...]]` pattern applies as in evil twins.
 
 ### Find potentially confusing words.
 
@@ -31,8 +31,7 @@ a vague or ambiguous claim has actually been communicated." (https://en.wikipedi
 
 "The passive voice is a grammatical construction (specifically, a "voice"). The noun or noun phrase that
 would be the object of an active sentence (such as Our troops defeated the enemy) appears as the subject
-of a sentence or clause in the passive voice (e.g. The enemy was defeated by our troops)."
-(https://en.wikipedia.org/wiki/English_passive_voice)
+of a sentence or clause in the passive voice (e.g. The enemy was defeated by our troops)." (https://en.wikipedia.org/wiki/English_passive_voice)
 
 ### Thanks
 
