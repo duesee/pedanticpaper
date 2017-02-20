@@ -11,7 +11,10 @@ config = {
     "allowed_chars": string.printable + "ÄÖÜäöüß",
     "strip": [
         r"(\\cite\{[^\}]*\})",
-        r"(\\todo\{[^\}]*\})"
+        r"(\\autoref\{[^\}]*\})",
+        r"(\\todo\{[^\}]*\})",
+        r"(\\label\{[^\}]*\})",
+		#r"[^\\]\%(.*)(?:\n|$)"
     ],
     "evil_twins": [
         (False, "public key",      ["public-key"]),

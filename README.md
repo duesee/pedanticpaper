@@ -37,6 +37,11 @@ File "test/input/ecc.tex:"
 config = {
     "regex_doublets": r"\b(\w+)\b\s+\b(\1)\b",
     "allowed_chars": string.printable + "ÄÖÜäöüß",
+    "strip": [
+        r"(\\cite\{[^\}]*\})",
+        r"(\\label\{[^\}]*\})",
+        r"(\\autoref\{[^\}]*\})"
+    ],
     "evil_twins": [
         (False, "public key", ["public-key"]),
         (True,  "RSA",        ["rsa", "Rsa"])
