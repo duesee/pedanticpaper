@@ -9,6 +9,17 @@ import os
 import sys
 
 
+WARN_NON_ALLOWED_CHAR_F1 = "found non-allowed char '{}'."
+WARN_LEFTOVER_WORD_F1 = 'found probably leftover word "{}". Please resolve it.'
+WARN_PASSIVE_VOICE_F1 = 'found passive voice "{}". Can it be clarified?'
+WARN_WEASEL_WORD_F1 = 'found weasel word "{}". Can it be clarified?'
+WARN_WRONG_ABBREV_F2 = 'found erroneous abbreviation "{}". Did you mean "{}"?'
+WARN_EVIL_TWIN_F2 = 'found evil twin "{}". Did you mean "{}"?'
+WARN_DOUBLET_F2 = 'found doublet "{} {}".'
+WARN_CONFUSING_F1 = 'found potentially confusing word "{}". Please be careful.'
+WARN_CONFUSING_F2 = 'found potentially confusing word "{}". Did you mean "{}"?'
+
+
 def walk_tex(path):
     def is_tex(path):
         if not os.path.isfile(path):
@@ -24,7 +35,7 @@ def walk_tex(path):
 
 
 def find_match(data, regex, casesensitive=False):
-    # if there is a backslash in the word, it is probably not a regex. Hence, include word-boundaries.
+    # if there is no backslash in the word, it is probably not a regex. Hence, include word-boundaries.
     if "\\" not in regex:
         regex = r"\b({})\b".format(regex)
     expr = re.compile(regex, flags=re.MULTILINE if casesensitive else re.MULTILINE | re.IGNORECASE)
@@ -40,7 +51,7 @@ def check_allowed_chars(text, results):
     for lineno, line in enumerate(text.splitlines(), 1):
         for char in line:
             if char not in config["allowed_chars"]:
-                results[lineno].append("found non-allowed char '{}'.".format(char))
+                results[lineno].append(WARN_NON_ALLOWED_CHAR_F1.format(char))
 
 
 def match_against_wordlist(text, results, wordlist, message, correct=None, casesensitive=False):
@@ -58,58 +69,36 @@ def check_confusing(text, results):
         for word in erroneous:
             for match in find_match(text, word, casesensitive):
                 if correct and match.group(0) != correct:
-                    results[lineno(match, text)].append('found potentially confusing word "{}". Did you mean "{}"?'.format(match.group(0), correct))
+                    results[lineno(match, text)].append(WARN_CONFUSING_F2.format(match.group(0), correct))
                 else:
-                    results[lineno(match, text)].append('found potentially confusing word "{}". Please be careful.'.format(match.group(0)))
+                    results[lineno(match, text)].append(WARN_CONFUSING_F1.format(match.group(0)))
 
 
 def check_doubled_words(text, results):
     for match in find_match(text, config["regex_doublets"]):
-        results[lineno(match, text)].append('found doublet "{} {}".'.format(match.group(1), match.group(2)))
+        results[lineno(match, text)].append(WARN_DOUBLET_F2.format(match.group(1), match.group(2)))
 
 
 def check_evil_twins(text, results):
     for (casesensitive, correct, erroneous) in config["evil_twins"]:
-        match_against_wordlist(text,
-                               results,
-                               erroneous,
-                               'found evil twin "{}". Did you mean "{}"?',
-                               correct=correct,
-                               casesensitive=casesensitive)
+        match_against_wordlist(text, results, erroneous, WARN_EVIL_TWIN_F2, correct=correct, casesensitive=casesensitive)
 
 
 def check_abbrev(text, results):
     for (casesensitive, correct, erroneous) in config["wrong_abbrev"]:
-        match_against_wordlist(text,
-                               results,
-                               erroneous,
-                               'found erroneous abbreviation "{}". Did you mean "{}"?',
-                               correct=correct,
-                               casesensitive=casesensitive)
+        match_against_wordlist(text, results, erroneous, WARN_WRONG_ABBREV_F2, correct=correct, casesensitive=casesensitive)
 
 
 def check_leftover_words(text, results):
-    match_against_wordlist(text,
-                           results,
-                           config["leftover_words"],
-                           'found probably leftover word "{}". Please resolve it.',
-                           casesensitive=False)
+    match_against_wordlist(text, results, config["leftover_words"], WARN_LEFTOVER_WORD_F1)
 
 
 def check_weasel_words(text, results):
-    match_against_wordlist(text,
-                           results,
-                           config["weasel_words"],
-                           'found weasel word "{}". Can it be clarified?',
-                           casesensitive=False)
+    match_against_wordlist(text, results, config["weasel_words"], WARN_WEASEL_WORD_F1)
 
 
 def check_passive_voice(text, results):
-    match_against_wordlist(text,
-                           results,
-                           config["passive_voice"],
-                           'found passive voice "{}". Can it be clarified?',
-                           casesensitive=False)
+    match_against_wordlist(text, results, config["passive_voice"], WARN_PASSIVE_VOICE_F1)
 
 
 def print_results(tests):
