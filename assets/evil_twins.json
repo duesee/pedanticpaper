@@ -1,6 +1,0 @@
-[
-	["public key",      ["(public\\-*key[^s])"]],
-	["public keys",     ["(public\\-*keys)"]],
-	["elliptic curve",  ["(elliptic\\s*\\-+\\s*curve[^s])"]],
-	["elliptic curves", ["(elliptic\\s*\\-+\\s*curves)"]]
-]
