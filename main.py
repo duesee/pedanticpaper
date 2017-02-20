@@ -9,12 +9,6 @@ import os
 import sys
 
 
-def find_match(data, regex):
-    expr = re.compile(regex, flags=re.MULTILINE)
-    for match in re.finditer(expr, data):
-        yield match
-
-
 def walk_tex(path):
     def is_tex(path):
         if not os.path.isfile(path):
@@ -29,6 +23,15 @@ def walk_tex(path):
                 yield os.path.abspath(path)
 
 
+def find_match(data, regex, casesensitive=False):
+    # if there is a backslash in the word, it is probably not a regex. Hence, include word-boundaries.
+    if "\\" not in regex:
+        regex = r"\b({})\b".format(regex)
+    expr = re.compile(regex, flags=re.MULTILINE if casesensitive else re.MULTILINE | re.IGNORECASE)
+    for match in re.finditer(expr, data):
+        yield match
+
+
 def lineno(match, text):
     return text.count(os.linesep, 0, match.start()) + 1
 
@@ -40,9 +43,9 @@ def check_allowed_chars(text, results):
                 results[lineno].append("found non-allowed char '{}'.".format(char))
 
 
-def find_via_regex(text, results, wordlist, message, correct=None):
+def match_against_wordlist(text, results, wordlist, message, correct=None, casesensitive=False):
     for word in wordlist:
-        for match in find_match(text, word):
+        for match in find_match(text, word, casesensitive):
             if correct:
                 if match.group(0) != correct:
                     results[lineno(match, text)].append(message.format(match.group(0), correct))
@@ -51,9 +54,9 @@ def find_via_regex(text, results, wordlist, message, correct=None):
 
 
 def check_confusing(text, results):
-    for (correct, erroneous) in config["confusing_words"]:
+    for (casesensitive, correct, erroneous) in config["confusing_words"]:
         for word in erroneous:
-            for match in find_match(text, word):
+            for match in find_match(text, word, casesensitive):
                 if correct and match.group(0) != correct:
                     results[lineno(match, text)].append('found potentially confusing word "{}". Did you mean "{}"?'.format(match.group(0), correct))
                 else:
@@ -61,30 +64,52 @@ def check_confusing(text, results):
 
 
 def check_doubled_words(text, results):
-    for match in find_match(text, config["regex_doublettes"]):
-        results[lineno(match, text)].append('found doublette "{} {}".'.format(match.group(1), match.group(2)))
+    for match in find_match(text, config["regex_doublets"]):
+        results[lineno(match, text)].append('found doublet "{} {}".'.format(match.group(1), match.group(2)))
 
 
 def check_evil_twins(text, results):
-    for (correct, erroneous) in config["evil_twins"]:
-        find_via_regex(text, results, erroneous, 'found evil twin "{}". Did you mean "{}"?', correct=correct)
+    for (casesensitive, correct, erroneous) in config["evil_twins"]:
+        match_against_wordlist(text,
+                               results,
+                               erroneous,
+                               'found evil twin "{}". Did you mean "{}"?',
+                               correct=correct,
+                               casesensitive=casesensitive)
 
 
 def check_abbrev(text, results):
-    for (correct, erroneous) in config["wrong_abbrev"]:
-        find_via_regex(text, results, erroneous, 'found erroneous abbreviation "{}". Did you mean "{}"?', correct=correct)
+    for (casesensitive, correct, erroneous) in config["wrong_abbrev"]:
+        match_against_wordlist(text,
+                               results,
+                               erroneous,
+                               'found erroneous abbreviation "{}". Did you mean "{}"?',
+                               correct=correct,
+                               casesensitive=casesensitive)
 
 
-def check_denied_words(text, results):
-    find_via_regex(text, results, config["denied_words"], 'found denied word "{}". Please resolve it.')
+def check_leftover_words(text, results):
+    match_against_wordlist(text,
+                           results,
+                           config["leftover_words"],
+                           'found probably leftover word "{}". Please resolve it.',
+                           casesensitive=False)
 
 
 def check_weasel_words(text, results):
-    find_via_regex(text, results, config["weasel_words"], 'found weasel word "{}". Can it be clarified?')
+    match_against_wordlist(text,
+                           results,
+                           config["weasel_words"],
+                           'found weasel word "{}". Can it be clarified?',
+                           casesensitive=False)
 
 
 def check_passive_voice(text, results):
-    find_via_regex(text, results, config["passive_voice"], 'found passive voice "{}". Can it be clarified?')
+    match_against_wordlist(text,
+                           results,
+                           config["passive_voice"],
+                           'found passive voice "{}". Can it be clarified?',
+                           casesensitive=False)
 
 
 def print_results(tests):
@@ -108,7 +133,7 @@ if __name__ == "__main__":
         with open(file, "r") as data:
             data = data.read()
             for check in config["checks"]:
-                 locals()[check](data, results)
+                locals()[check](data, results)
         tests[file] = results
 
     print_results(tests)
