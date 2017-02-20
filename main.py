@@ -121,6 +121,9 @@ if __name__ == "__main__":
         results = defaultdict(lambda: [])
         with open(file, "r") as data:
             data = data.read()
+            for regex in config["strip"]:
+                regex = re.compile(regex, flags=re.MULTILINE)
+                data = regex.sub("", data)
             for check in config["checks"]:
                 locals()[check](data, results)
         tests[file] = results

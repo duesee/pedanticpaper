@@ -9,6 +9,10 @@ def load_json(path):
 config = {
     "regex_doublets": r"\b(\w+)\b\s+\b(\1)\b",
     "allowed_chars": string.printable + "ÄÖÜäöüß",
+    "strip": [
+        r"(\\cite\{[^\}]*\})",
+        r"(\\todo\{[^\}]*\})"
+    ],
     "evil_twins": [
         (False, "public key",      ["public-key"]),
         (False, "public keys",     ["public-keys"]),
