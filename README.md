@@ -1,26 +1,45 @@
 ## Pedanticpaper
 
-The script at hand finds several mistakes when writing research papers, a spell-checker won't. This is archieved by defining a per-project configuration file.
+The script at hand finds mistakes when writing research papers, a spell-checker won't. This is archieved by defining a per-project configuration file.
 
 Currently, the tool does the following:
 
-* It checks for "evil twins", i.e. that a single notation (e.g. "side-channel") was used instead of different ones (e.g. "side channel" or "sidechannel"). This is especially useful when content is provided by multiple authors.
-* It finds doublettes, i.e. "We showed that that...". This can happen due to copy-paste errors and can easily be overlooked.
+* It checks for "evil twins", i.e. that a single notation (e.g. "side-channel") and not different ones (e.g. "side channel" or "sidechannel") were used. This is especially useful when content is provided by multiple authors.
+* It finds doubletes, i.e. "We showed that that...". This can happen due to copy-paste errors and is easily overlooked.
 * It finds non-allowed characters, i.e. difficult to spot unicode characters which may introduce parsing errors.
-* It checks for consistency in titles, i.e. if the same style (e.g. upper-case style "How to write a Research Paper" or lower-case style "How to write a research paper") is used to name each section, subsection, etc.
-* It warns on potentially confusing words like "proposed" and "purposed", which pass a spell-check, but carry different meaning. If you spot some of them during writing, put them here to be prepared in the future.
-* It checks for wrong abbreviation, e.g. "et al" or "ie.".
+* It warns on potentially confusing words like "proposed" and "purposed", which pass a spell-check, but carry different meaning. If you spot some of them during writing, put them in the config-file to be prepared in the future.
+* It checks for wrong abbreviation like "et. al" or "ie.".
 * It checks for so called "weasel words" and passive voice. See [shell-scripts-for-passive-voice-weasel-words-duplicates](http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/).
 
-### Sample Configuration
+
+### Sample.
+
+```
+$ python main.py "./"
+Starting recursive search from "./"
+File "test/classic.tex:"
+	Line 7: found doublet "the the".
+	Line 7: found non-allowed char '²'.
+	Line 8: found evil twin "elliptic-curves". Did you mean "elliptic curves"?
+	Line 9: found erroneous abbreviation "e.g ". Did you mean "e.g."?
+
+File "test/input/ecc.tex:"
+	Line 3: found potentially confusing word "purposed". Did you mean "proposed"?
+	Line 6: found doublet "and and".
+	Line 9: found probably leftover word "todo". Please resolve it.
+	Line 9: found weasel word "extremely". Can it be clarified?
+	Line 10: found evil twin "rsa". Did you mean "RSA"?
+```
+
+### Configuration.
 
 ```Python
 config = {
     "regex_doublets": r"\b(\w+)\b\s+\b(\1)\b",
     "allowed_chars": string.printable + "ÄÖÜäöüß",
     "evil_twins": [
-        (False, "public key",      ["public-key"]),
-        (True,  "RSA",             ["rsa", "Rsa"])
+        (False, "public key", ["public-key"]),
+        (True,  "RSA",        ["rsa", "Rsa"])
     ],
     "wrong_abbrev": [
         (False, "et al.", [r"(et\.\s*al\.*|et\s+al[^\.])"]),
@@ -28,8 +47,8 @@ config = {
         (False, "e.g.",   [r"(e\.g[^\.]|eg\.|e\.\s+g\.)"])
     ],
     "confusing_words": [
-        (False, "threat",   ["thread"]),
-        (False, None,       ["lack", "leak", "lacks", "leaks"])
+        (False, "threat", ["thread"]),
+        (False, None,     ["lack", "leak", "lacks", "leaks"])
     ],
     "leftover_words": [
         "todo",
@@ -56,28 +75,7 @@ config = {
 }
 ```
 
-### Sample
-
-```
-$ python main.py "./"
-Starting recursive search from "./"
-File "test/classic.tex:"
-	Line 7: found doublet "the the".
-	Line 7: found non-allowed char '²'.
-	Line 8: found evil twin "elliptic-curves". Did you mean "elliptic curves"?
-	Line 9: found erroneous abbreviation "e.g ". Did you mean "e.g."?
-	Line 9: found erroneous abbreviation "eg.". Did you mean "e.g."?
-
-File "test/input/ecc.tex:"
-	Line 3: found potentially confusing word "purposed". Did you mean "proposed"?
-	Line 5: found doublet "is is".
-	Line 6: found doublet "and and".
-	Line 9: found probably leftover word "todo". Please resolve it.
-	Line 9: found weasel word "extremely". Can it be clarified?
-	Line 10: found evil twin "rsa". Did you mean "RSA"?
-```
-
-### Configuration.
+### Configuration format.
 
 The format for evil twins, abbrev., etc. is as follows:
 
@@ -85,22 +83,22 @@ The format for evil twins, abbrev., etc. is as follows:
 (case_sensitive, correct_version, [incorrect_version, incorrect_version, ...])
 ```
 
-The tool automatically includes word-boundaries if a "simple string", i.e. one without a backslash, is provided. The code is as follows:
+The tool automatically includes word-boundaries if a "simple word", i.e. a string without a backslash, is provided. The code is as follows:
 
 ```python
 if "\\" in word: word = r"\b({})\b".format(word)
 ```
 
-This is so that `"is"` will not match against `"Th(is) is an example..."`. Otherwise, the original string is used as regex. The second element in the tuple is the "probably right" word -- use `None` if there is none. (This only applies to `confusing_words`.)
+This is so that `"is"` will not match against `"Th(is) is an example..."` and authors must not write `r"\\b(is)\\b"`. Otherwise, the original string is used as regex. The second element in the tuple is the "probably right" word -- use `None` if there is none. (This only applies to `confusing_words`).
 
-### Thanks.
-
-Some of the list were taken from http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/.
-
-### Help building regular expressions
+### Help building regular expressions.
 
 See [regex101](https://regex101.com/).
 
-### Important
+### Thanks.
+
+The weasel- and passive voice lists were taken from http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/.
+
+### Important.
 
 The script at hand may contain unpythonic and/or unelegant code and insult pedantic programmers. Beside from that, it does not change any files and pull-request are always welcome.
