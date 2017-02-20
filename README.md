@@ -55,6 +55,9 @@ config = {
         (False, "threat", ["thread"]),
         (False, None,     ["lack", "leak", "lacks", "leaks"])
     ],
+    "fishy_constructs": [
+        r"(?<!\\url\{)https*:\/\/"
+    ],
     "leftover_words": [
         "todo",
         "unfinished"
@@ -75,7 +78,8 @@ config = {
         "check_weasel_words",
         "check_passive_voice",
         "check_leftover_words",
-        "check_confusing",
+        "check_fishy_constructs",
+        "check_confusing"
     ]
 }
 ```
