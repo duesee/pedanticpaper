@@ -18,6 +18,7 @@ WARN_EVIL_TWIN_F2 = 'found evil twin "{}". Did you mean "{}"?'
 WARN_DOUBLET_F2 = 'found doublet "{} {}".'
 WARN_CONFUSING_F1 = 'found potentially confusing word "{}". Please be careful.'
 WARN_CONFUSING_F2 = 'found potentially confusing word "{}". Did you mean "{}"?'
+WARN_FISHY_CONSTRUCT_F1 = 'found a fishy construct "{}". Please check.'
 
 
 def walk_tex(path):
@@ -81,16 +82,22 @@ def check_doubled_words(text, results):
 
 def check_evil_twins(text, results):
     for (casesensitive, correct, erroneous) in config["evil_twins"]:
-        match_against_wordlist(text, results, erroneous, WARN_EVIL_TWIN_F2, correct=correct, casesensitive=casesensitive)
+        match_against_wordlist(text, results, erroneous, WARN_EVIL_TWIN_F2, correct=correct,
+                               casesensitive=casesensitive)
 
 
 def check_abbrev(text, results):
     for (casesensitive, correct, erroneous) in config["wrong_abbrev"]:
-        match_against_wordlist(text, results, erroneous, WARN_WRONG_ABBREV_F2, correct=correct, casesensitive=casesensitive)
+        match_against_wordlist(text, results, erroneous, WARN_WRONG_ABBREV_F2, correct=correct,
+                               casesensitive=casesensitive)
 
 
 def check_leftover_words(text, results):
     match_against_wordlist(text, results, config["leftover_words"], WARN_LEFTOVER_WORD_F1)
+
+
+def check_fishy_constructs(text, results):
+    match_against_wordlist(text, results, config["fishy_constructs"], WARN_FISHY_CONSTRUCT_F1)
 
 
 def check_weasel_words(text, results):

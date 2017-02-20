@@ -1,9 +1,4 @@
 import string
-import json
-
-
-def load_json(path):
-    return json.load(open(path, "rt"))
 
 
 config = {
@@ -14,25 +9,28 @@ config = {
         r"(\\autoref\{[^\}]*\})",
         r"(\\todo\{[^\}]*\})",
         r"(\\label\{[^\}]*\})",
-		#r"[^\\]\%(.*)(?:\n|$)"
+        # r"[^\\]\%(.*)(?:\n|$)"
     ],
     "evil_twins": [
-        (False, "public key",      ["public-key"]),
-        (False, "public keys",     ["public-keys"]),
-        (False, "elliptic curve",  ["elliptic-curve"]),
+        (False, "public key", ["public-key"]),
+        (False, "public keys", ["public-keys"]),
+        (False, "elliptic curve", ["elliptic-curve"]),
         (False, "elliptic curves", ["elliptic-curves"]),
-        (True,  "ECC",             ["ecc"]),
-        (True,  "RSA",             ["rsa", "Rsa"])
+        (True, "ECC", ["ecc"]),
+        (True, "RSA", ["rsa", "Rsa"])
     ],
     "wrong_abbrev": [
         (False, "et al.", [r"(et\.\s*al\.*|et\s+al[^\.])"]),
-        (False, "i.e.",   [r"(i\.e[^\.]|ie\.|i\.\s+e\.)"]),
-        (False, "e.g.",   [r"(e\.g[^\.]|eg\.|e\.\s+g\.)"])
+        (False, "i.e.", [r"(i\.e[^\.]|ie\.|i\.\s+e\.)"]),
+        (False, "e.g.", [r"(e\.g[^\.]|eg\.|e\.\s+g\.)"])
     ],
     "confusing_words": [
-        (False, "threat",   ["thread"]),
+        (False, "threat", ["thread"]),
         (False, "proposed", ["purposed"]),
-        (False, None,       ["lack", "leak", "lacks", "leaks"])
+        (False, None, ["lack", "leak", "lacks", "leaks"])
+    ],
+    "fishy_constructs": [
+        r"(?<!\\url\{)https*:\/\/"
     ],
     "leftover_words": [
         "todo",
@@ -248,6 +246,7 @@ config = {
         "check_doubled_words",
         "check_abbrev",
         "check_evil_twins",
+        "check_fishy_constructs",
         "check_weasel_words",
         "check_passive_voice",
         "check_leftover_words",

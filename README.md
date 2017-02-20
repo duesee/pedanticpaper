@@ -10,7 +10,7 @@ Currently, the tool does the following:
 * It warns on potentially confusing words like "proposed" and "purposed", which pass a spell-check, but carry different meaning. If you spot some of them during writing, put them in the config-file to be prepared in the future.
 * It checks for wrong abbreviation like "et. al" or "ie.".
 * It checks for so called "weasel words" and passive voice. See [shell-scripts-for-passive-voice-weasel-words-duplicates](http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/).
-
+* It checks for "fishy constructs" like `http://` without prior `\url{`. (Currently only this check (although with `https://`), but more can easily be added.)
 
 ### Sample.
 
